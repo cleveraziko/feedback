@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,13 +8,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="{% static 'reviews/styles.css' %}">
 </head>
 
 <body>
-    <form method="POST">
+    <form action="/" method="POST">
         {% csrf_token %}
-        <label for="name">Your Name</label>
-        <input id="name" name="username" type="text">
+        {% comment %} {% if has_error %}
+        <p>This form is invalid - pls enter valid username</p>
+        {% endif %} {% endcomment %}
+        {% for field in form %}
+        <div class="form-control {% if field.review_text.errors %}errors{% endif %}">
+            {{field.label_tag}}
+            {{field}}
+            {{field.errors}}
+        </div>
+        {% endfor %}
+        {% comment %} <div class="form-control {% if form.username.errors %}errors{% endif %}">
+            {{form.username.label_tag}}
+            {{form.username}}
+            {{form.username.errors}}
+        </div>
+        <div class="form-control {% if form.review_text.errors %}errors{% endif %}">
+            {{form.review_text.label_tag}}
+            {{form.review_text}}
+            {{form.review_text.errors}}
+
+        </div>
+        <div class="form-control {% if form.rating.errors %}errors{% endif %}">
+            {{form.rating.label_tag}}
+            {{form.rating}}
+            {{form.rating.errors}}
+
+        </div> {% endcomment %}
+
+
+        {% comment %} <label for=" name">Your Name</label> {% endcomment %}
+        {% comment %} <input id="name" name="username" type="text"> {% endcomment %}
         <button type="submit">Send</button>
     </form>
 </body>
