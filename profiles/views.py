@@ -1,10 +1,32 @@
 from django.shortcuts import render
-from django.views.generic.base import TemplateView
+from django.views import View
+from django.http import HttpResponseRedirect
+from .forms import ProfileForm
+
+def store_file(file):
+    with open("temp/image.jpg", "wb+") as dest:
+        for chunk in file.chunks():
+            dest.write(chunk)
 
 
-class CreateProfileView(TemplateView):
-    template_name = "profiles/create_profile.html"
-    
+
+class CreateProfileView(View):
+    def get(self, request):
+        form = ProfileForm()
+        return render(request,"profiles/create_profile.html",{
+            "form": form
+        })
+
+    def post(self, request):
+        submitted_form = ProfileForm(request.POST, request.FILES)
+        if submitted_form.is_valid():
+            store_file(request.FILES['image'])
+            return HttpResponseRedirect("/profile")
+        else:
+            return render(request,"profiles/create_profile.html",{
+            "form": submitted_form  
+        })
+
     
     
     
