@@ -120,3 +120,7 @@ class ReviewDetail(DetailView):
 #     })
 
 
+class AddFavorite(View):
+    def post(self, request):
+        review_id = request.POST['review_id']
+        fav_review = Review.objects.get(pk=review_id)
